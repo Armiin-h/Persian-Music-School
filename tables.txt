@@ -1,0 +1,111 @@
+/*
+create database project
+ON
+(name=project,
+Filename='C:\Users\DbLab\Desktop\project\project.mdf',
+Size=10,
+Maxsize=100,
+Filegrowth=5)
+Log on
+(name=project,
+Filename= 'C:\Users\DbLab\Desktop\project\project.ldf',
+Size=8,
+Maxsize=100,
+Filegrowth=4)
+*/
+use Dblab_project;
+
+
+create table Student
+(	
+	First_Name varchar(20) not null,
+	Last_Name varchar(30) not null,
+	Birth_Date Char(8) null,
+	National_Code char(10) not null unique,
+	Phone char(11) not null unique,
+	Address varchar(200) null,
+	SID int AUTO_INCREMENT primary key,
+	Instrument_Name char(10) not null,
+	spassword varchar(20) not null
+);
+
+
+create table Class
+(	Number varchar(6) not null,
+	day varchar(8) not null,
+	hour char(5) not null,
+	EID char(8) not null,
+	Instrument_Name varchar(20) not null,
+	cmaster varchar(20) not null,
+	/* SID char(8) not null foreign key references Student(SID),*/
+	SID char(8) not null,
+	/* constraint FK_Class foreign key (EID,Instrument_Name) references masters (EID,Instrument_Name),*/
+	/* constraint FK_Class foreign key (EID) references masters (EID),*/
+	constraint PK_Class primary key (Number,day,hour)
+);  
+
+create table Term
+(	
+	Term_ID tinyint not null AUTO_INCREMENT,
+	EID char(8) not null,
+	Instrument_Name varchar(20) not null,
+	Session_Count varchar(2) not null,
+	Session_Price varchar(8) not null,
+	Session_Time varchar(3) not null,
+	primary key (Term_ID),
+	/* constraint FK_Term foreign key (EID,Instrument_Name) references masters (EID,Instrument_Name)*/
+	/*constraint FK_Term foreign key (EID) references masters (EID)*/
+);
+create table masters
+(	
+	First_Name varchar(20) not null,
+	Last_Name varchar(30) not null,
+  	EID char(8) not null primary key,
+	Salary varchar(10) not null,
+	National_Code char(10) not null unique,
+	Phone char(11) not null unique,
+	Entrance_Date char(8) not null,
+	Insurance_Num   int not null,
+	Instrument_Name varchar(20) not null
+);
+
+create table Payment
+(	Pay_ID varchar(10) not null primary key,
+	Time datetime not null
+);
+
+create table admins
+(	
+  	First_Name varchar(20) not null,
+	Last_Name varchar(30) not null,
+	National_Code char(10) not null unique,
+	Apassword varchar(20) not null
+);
+
+
+create table academy
+(	Name varchar(30) not null,
+	Address varchar(60) not null,
+	Tel char(11) not null,
+	Website varchar(40) null,
+	Email varchar(40) null,
+	Founder_Name varchar(50) not null,
+	Found_Date Date not null,
+	Reg_Num varchar(25) not null primary key
+);
+
+CREATE PROCEDURE `Show_asatid_admin`()
+BEGIN
+	SELECT EID,First_Name,Last_Name,Instrument_Name,Salary,National_Code,Phone,Entrance_Date,Insurance_Num FROM masters;
+END;
+
+CREATE PROCEDURE `Show_honarjo_admin`()
+BEGIN
+	SELECT First_Name,Last_Name,Instrument_Name,Birth_Date,National_Code,Phone,Address FROM student;
+END;
+
+CREATE PROCEDURE `Show_term_admin`()
+BEGIN
+	SELECT EID,Instrument_Name,Session_Count,Session_Price,Session_Time FROM Term;
+END;
+
